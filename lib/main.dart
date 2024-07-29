@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:filepicker_windows/filepicker_windows.dart';
+import 'auth/secrets.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,6 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   padding: EdgeInsets.all(10),
@@ -82,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       spacing: MediaQuery.of(context).size.width * 0.0125,
                       children: [
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          width: MediaQuery.of(context).size.width * 0.3,
                           height: 50,
                           child: TextField(
                             decoration: const InputDecoration(
@@ -100,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          width: MediaQuery.of(context).size.width * 0.3,
                           child: TextField(
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
@@ -108,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             controller: TextEditingController.fromValue(
                               TextEditingValue(
-                                text: movieFiles[index],
+                                text: '$omdbapikey',
                                 selection: TextSelection.collapsed(
                                   offset: movieFiles[index].length,
                                 ),
@@ -133,6 +136,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Icon(Icons.arrow_forward),
+                          style: ButtonStyle(
+                            foregroundColor: Colors.green,
+                          ),
+                        )
                       ],
                     ),
                   ],
