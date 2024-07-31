@@ -3,27 +3,36 @@ class FilenameCleaning {
   List<Map<RegExp, String>> cleaningPatterns = [
     {RegExp(r'\.'): ' '}, // Replace literal . with space
     {
-      RegExp(r'(mkv|avi|webm)$'): ''
+      RegExp(r'(mkv|avi|webm|mp4)$'): ''
     }, // Remove file extension (e.g., ".mkv", ".avi")
-    {RegExp(r'?i:dvdrip'): ''},
-    {RegExp(r'(?i:xvid)'): ''},
-    {RegExp(r'(?i:720p)'): ''},
-    {RegExp(r'(?i:1080p)'): ''},
-    {RegExp(r'(?i:web)'): ''},
-    {RegExp(r'(?i:h264)'): ''},
+    {RegExp(r'dvdrip', caseSensitive: false): ''},
+    {RegExp(r'xvid', caseSensitive: false): ''},
+    {RegExp(r'720p', caseSensitive: false): ''},
+    {RegExp(r'1080p', caseSensitive: false): ''},
+    {RegExp(r'web', caseSensitive: false): ''},
+    {RegExp(r'h264', caseSensitive: false): ''},
 
     // Remove format (e.g., "h264", "720p")
 
     {RegExp(r'-\w+$'): ''}, // Remove trailing group name (e.g., "-EDITH")
-    {RegExp(r'(?i:Full Special)'): ''}, // Remove sentence. Case insensitive
     {
-      RegExp(r'(?i:Full Comedy Special)'): ''
+      RegExp(r'Full Special', caseSensitive: false): ''
+    }, // Remove sentence. Case insensitive
+    {
+      RegExp(r'One Hour Stand Up', caseSensitive: false): ''
+    }, // Remove sentence. Case insensitive
+
+    {
+      RegExp(r'Standup Comedy', caseSensitive: false): ''
+    }, // Remove sentence. Case insensitive
+    {
+      RegExp(r'Full Comedy Special', caseSensitive: false): ''
     }, // Remove sentence Case insensitive
     {
-      RegExp(r'(?i:Full Comedy Standup Special)'): ''
+      RegExp(r'Full Comedy Standup Special', caseSensitive: false): ''
     }, // Remove sentence Case insensitive
     {RegExp(r'\[[a-zA-Z0-9-_]{11}\]'): ''}, // Replace youtube-links
-    {RegExp(r'(?i: NF )'): ''},
+    {RegExp(r' NF ', caseSensitive: false): ''},
     {RegExp(r"[/']"): ''}, // Replace single quotes
     {RegExp(r'[/"]'): ''}, // Replace double quotesr
     {RegExp(r'[:]'): ''}, // Replace :
@@ -33,6 +42,20 @@ class FilenameCleaning {
     {RegExp(r'[/[]'): ''}, // Replace [
     {RegExp(r']'): ''}, // Replace ]
     {RegExp(r'[-]'): ''}, // Replace -
+
+    //questionable removes
+    {RegExp(r'h 264', caseSensitive: false): ''},
+    {RegExp(r'DL', caseSensitive: false): ''},
+    {RegExp(r'DDP5', caseSensitive: false): ''},
+    {RegExp(r' 0', caseSensitive: false): ''},
+    {RegExp(r' 1 ', caseSensitive: false): ''},
+    {RegExp(r' 2 ', caseSensitive: false): ''},
+
+    {RegExp(r'part 2', caseSensitive: false): ''},
+    {RegExp(r'rip', caseSensitive: false): ''},
+    {RegExp(r'p2p', caseSensitive: false): ''},
+    {RegExp(r'aac', caseSensitive: false): ''},
+
     {RegExp(r'\s+'): ' '}, // Replace multiple spaces with a single space
   ];
 
@@ -40,21 +63,20 @@ class FilenameCleaning {
     for (var pattern in cleaningPatterns) {
       pattern.forEach((regex, replacement) {
         input = input.replaceAll(regex, replacement);
+        // print(input);
       });
     }
     return input.trim();
   }
 }
 
-  // for (String filename in filenames) {
-  //   //print('Original Filename: $filename');
-  //   String cleanedFilename = washString(filename, cleaningPatterns);
-  //   // Map<String, String?> info = extractInfo(cleanedFilename);
-  //   print('Cleaned Filename: $cleanedFilename');
-  //   // print('Extracted Info: $info\n');
-  // }
-
-
+// for (String filename in filenames) {
+//   //print('Original Filename: $filename');
+//   String cleanedFilename = washString(filename, cleaningPatterns);
+//   // Map<String, String?> info = extractInfo(cleanedFilename);
+//   print('Cleaned Filename: $cleanedFilename');
+//   // print('Extracted Info: $info\n');
+// }
 
 // Map<String, String?> extractInfo(String filename) {
 //   List<RegExp> patterns = [
@@ -83,4 +105,3 @@ class FilenameCleaning {
 //     'title': null,
 //     'year': null,
 //   };
-

@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:allarepodcasts/filename_cleaning.dart';
+import 'package:allarepodcasts/omdb_service.dart';
 import 'package:flutter/material.dart';
 import 'package:filepicker_windows/filepicker_windows.dart';
 import 'auth/secrets.dart';
@@ -67,10 +69,38 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  OmdbService omdbService = OmdbService();
+  Map<String, dynamic>? movieData;
+  late TextEditingController textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    TextEditingController textEditingController(String value) =>
+        TextEditingController(
+          text: FilenameCleaning()
+              .washString(value, FilenameCleaning().cleaningPatterns),
+        );
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+  void fetchMovieData(String title) async {
+    final data = await omdbService.fetchMovie(title);
+    setState(() {
+      movieData = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List movieFiles = widget.movieFiles;
     // String currentDirectory = widget.currentDirectory;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -117,64 +147,30 @@ class _MyHomePageState extends State<MyHomePage> {
                       spacing: MediaQuery.of(context).size.width * 0.0125,
                       children: [
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
+                          width: MediaQuery.of(context).size.width * 0.7,
                           height: 50,
                           child: TextField(
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
-                              labelText: 'Name',
+                              labelText: 'Search String on OMDB',
                             ),
-                            controller: TextEditingController.fromValue(
-                              TextEditingValue(
-                                text: movieFiles[index],
-                                selection: TextSelection.collapsed(
-                                  offset: movieFiles[index].length,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.3,
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Album',
-                            ),
-                            controller: TextEditingController.fromValue(
-                              TextEditingValue(
-                                text: '$omdbapikey',
-                                selection: TextSelection.collapsed(
-                                  offset: movieFiles[index].length,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.1,
-                          child: TextField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Year|',
-                            ),
-                            controller: TextEditingController.fromValue(
-                              TextEditingValue(
-                                text: movieFiles[index],
-                                selection: TextSelection.collapsed(
-                                  offset: movieFiles[index].length,
-                                ),
-                              ),
-                            ),
+                            controller: textEditingController,
+
+                            // TextEditingController.fromValue(
+                            //   TextEditingValue(
+                            //     text: FilenameCleaning().washString(
+                            //         movieFiles[index],
+                            //         FilenameCleaning().cleaningPatterns),
+                            //     selection: TextSelection.collapsed(
+                            //       offset: movieFiles[index].length,
+                            //     ),
+                            //   ),
+                            // ),
                           ),
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            readCounter().then((value) {
-                              writeCounter(value + 1);
-                              print(value + 1);
-                              print(Platform.resolvedExecutable);
-                            });
+                            // fetchmoviedata with TextField text
                           },
                           style: ButtonStyle(
                             iconColor: WidgetStateProperty.all(Colors.green),
@@ -206,6 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
             }
 
             for (var file in files) {
+              //TODO: Make a global list of file endings for both this and the
               if (file.path.endsWith('.mp4') ||
                   file.path.endsWith('.mkv') ||
                   file.path.endsWith('.avi')) {

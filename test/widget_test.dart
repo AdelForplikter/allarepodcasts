@@ -53,18 +53,64 @@ List<String> filenames = [
   'Louis C.K. - Shameless.avi',
 ];
 
+List<String> filenamesExpected = [
+  'Bill Burr Why Do I Do This 2008',
+  'Ronny Chieng Asian Comedian Destroys America 2019',
+  'Taylor Tomlinson Have It All 2024',
+  'Taylor Tomlinson Look at You 2022',
+  'Taylor Tomlinson QuarterLife Crisis 2020',
+  'Im Nervous, Insecure and Squishy Mark Normand',
+  'Ali Siddiq THE DOMINO EFFECT LOSS',
+  'Ari Shaffir JEW 2022',
+  'Bill Burr Im Sorry You Feel That Way',
+  'Bill Burr Live at Red Rocks 2022 x264SMURF',
+  'Bill Burr Paper Tiger 2019',
+  'Bill Burr Walk Your Way Out 2017',
+  'bill burr why do i do this 2008 kyr',
+  'Bill Burr You People Are All the Same 2012',
+  'Brian Posehn Posehna Non Grata',
+  'Dry Bar Double Feature Shayne Smith',
+  'Dry Bar Double Feature Bengt Washburn',
+  'Stavros Halkias Live At The Lodge Room',
+  'Greg Warren The Salesman',
+  'Joe List Enough For Everybody',
+  'Joe List I Hate Myself',
+  'Joe List This Years Material',
+  'Kelsey Cook The Hustler',
+  'Kyle Kinane Shocks & Struts',
+  'Kyle Kinane Trampoline In A Ditch',
+  'Kyle Kinane I Liked His Old Stuff Better',
+  'Kyle Kinane Loose in Chicago',
+  'Louis Katz The Best Comedian Youve Never Heard Of',
+  'Mark Normand Dont Be Yourself',
+  'Mark Normand Out To Lunch',
+  'Patrice ONeal Elephant In The Room 2011 SD73TJZo',
+  'Ronny Chieng Speakeasy 2022 x264GeTrEKT',
+  'Sam Morril I Got This',
+  'The Domino Effect Comedy Special by Ali Siddiq',
+  'Why Cats Are Better Than Dogs Zoltan Kaszas',
+  'Zoltan Kaszas Modern Male',
+  'Zoltan Kaszas White Lies',
+  'Jim Gaffigan Dark Pale 2023 EDITH',
+  'john mulaney new in town 2012yestv',
+  'Louis C K Shameless'
+];
+
 void main() {
   testWidgets('smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
   });
   testWidgets('cleaning test', (WidgetTester tester) async {
+    int countFilename = 0;
     for (String filename in filenames) {
       //print('Original Filename: $filename');
       String cleanedFilename = FilenameCleaning()
           .washString(filename, FilenameCleaning().cleaningPatterns);
       // Map<String, String?> info = extractInfo(cleanedFilename);
-      print('Cleaned Filename: $cleanedFilename');
+      expect(cleanedFilename, filenamesExpected[countFilename]);
+      countFilename++;
+      // print('Cleaned Filename: $cleanedFilename');
       // print('Extracted Info: $info\n');
     }
   });
