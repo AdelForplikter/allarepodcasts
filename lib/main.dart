@@ -2,6 +2,37 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:filepicker_windows/filepicker_windows.dart';
 import 'auth/secrets.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+}
+
+Future<File> get _localFile async {
+  final path = await _localPath;
+  return File('$path/xm33count99.txt');
+}
+
+Future<File> writeCounter(int counter) async {
+  final file = await _localFile;
+  return file.writeAsString('$counter');
+}
+
+Future<int> readCounter() async {
+  try {
+    final file = await _localFile;
+
+    // Read the file
+    final contents = await file.readAsString();
+
+    return int.parse(contents);
+  } catch (e) {
+    // If encountering an error, return 0
+    return 0;
+  }
+}
 
 void main() {
   runApp(const MyApp());
@@ -77,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context, index) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ListTile(
                       title: Text(movieFiles[index]),
@@ -137,11 +169,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                         ElevatedButton(
-                          onPressed: () {},
-                          child: Icon(Icons.arrow_forward),
+                          onPressed: () {
+                            readCounter().then((value) {
+                              writeCounter(value + 1);
+                              print(value + 1);
+                              print(Platform.resolvedExecutable);
+                            });
+                          },
                           style: ButtonStyle(
-                            foregroundColor: Colors.green,
+                            iconColor: WidgetStateProperty.all(Colors.green),
                           ),
+                          child: const Icon(Icons.arrow_forward),
                         )
                       ],
                     ),
@@ -154,6 +192,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          writeCounter(44);
+
           final file = DirectoryPicker()..title = 'Select a directory';
 
           final result = file.getDirectory();
