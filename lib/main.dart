@@ -14,7 +14,8 @@ Future<String> get _localPath async {
 
 Future<File> get _localFile async {
   final path = await _localPath;
-  return File('$path/xm33count99.txt');
+  return File(
+      '$path/xm33count99.txt'); // saved in ano/documents/xm33count99.txt
 }
 
 Future<File> writeCounter(int counter) async {
@@ -71,21 +72,21 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   OmdbService omdbService = OmdbService();
   Map<String, dynamic>? movieData;
-  late TextEditingController textEditingController;
+  // late TextEditingController textEditingController;
 
   @override
   void initState() {
     super.initState();
-    TextEditingController textEditingController(String value) =>
-        TextEditingController(
-          text: FilenameCleaning()
-              .washString(value, FilenameCleaning().cleaningPatterns),
-        );
+    // TextEditingController textEditingController(String value) =>
+    //     TextEditingController(
+    //       text: FilenameCleaning()
+    //           .washString(value, FilenameCleaning().cleaningPatterns),
+    //     );
   }
 
   @override
   void dispose() {
-    textEditingController.dispose();
+    // textEditingController.dispose();
     super.dispose();
   }
 
@@ -154,23 +155,22 @@ class _MyHomePageState extends State<MyHomePage> {
                               border: OutlineInputBorder(),
                               labelText: 'Search String on OMDB',
                             ),
-                            controller: textEditingController,
-
-                            // TextEditingController.fromValue(
-                            //   TextEditingValue(
-                            //     text: FilenameCleaning().washString(
-                            //         movieFiles[index],
-                            //         FilenameCleaning().cleaningPatterns),
-                            //     selection: TextSelection.collapsed(
-                            //       offset: movieFiles[index].length,
-                            //     ),
-                            //   ),
-                            // ),
+                            controller: TextEditingController.fromValue(
+                              TextEditingValue(
+                                text: FilenameCleaning().washString(
+                                    movieFiles[index],
+                                    FilenameCleaning().cleaningPatterns),
+                                selection: TextSelection.collapsed(
+                                  offset: movieFiles[index].length,
+                                ),
+                              ),
+                            ),
+                            onChanged: (value) => movieFiles[index] = value,
                           ),
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            // fetchmoviedata with TextField text
+                            fetchMovieData(movieFiles[index]);
                           },
                           style: ButtonStyle(
                             iconColor: WidgetStateProperty.all(Colors.green),
