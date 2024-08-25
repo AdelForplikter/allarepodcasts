@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:allarepodcasts/auth/secrets.dart';
+import 'auth/secrets.dart';
 
 class OmdbService {
   final String apiKey = omdbapikey;
 
   Future<Map<String, dynamic>?> fetchMovie(String title) async {
-    final String url = 'http://www.omdbapi.com/?t=$title&apikey=$apiKey';
+    final String url = 'http://www.omdbapi.com/?s=$title&apikey=$apiKey';
     print(url);
     final response = await http.get(Uri.parse(url));
 
